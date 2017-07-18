@@ -110,7 +110,7 @@ public class StreamBenchmark2 {
         blackhole.consume(accounts);
     }
 
-    static String[] names = {"Steve", "Kate", "Anna", "Brajanek", "( ͡º ͜ʖ͡º)", "Faggot"};
+    static String[] names = {"Steve", "Kate", "Anna", "Brajanek", "( ͡º ͜ʖ͡º)", "Somebody"};
 
     static class Person {
         final UUID uuid = UUID.randomUUID();
