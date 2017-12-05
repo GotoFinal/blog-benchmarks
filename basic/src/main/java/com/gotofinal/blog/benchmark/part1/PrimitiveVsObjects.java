@@ -22,89 +22,75 @@ import org.openjdk.jmh.runner.options.Options;
 import org.openjdk.jmh.runner.options.OptionsBuilder;
 
 @BenchmarkMode(Mode.AverageTime)
-@OutputTimeUnit(TimeUnit.NANOSECONDS)
-@Warmup(iterations = 5, time = 2, timeUnit = TimeUnit.SECONDS)
-@Measurement(iterations = 3, time = 2, timeUnit = TimeUnit.SECONDS)
+@OutputTimeUnit(TimeUnit.MILLISECONDS)
+@Warmup(iterations = 5, time = 10, timeUnit = TimeUnit.SECONDS)
+@Measurement(iterations = 20, time = 5, timeUnit = TimeUnit.SECONDS)
 @Timeout(time = 20, timeUnit = TimeUnit.SECONDS)
 @State(Scope.Benchmark)
 @Threads(1)
-public class PrimitiveVsObjects
-{
+public class PrimitiveVsObjects {
     public static final int TEST_SIZE = 1_000_000;
 
     @Benchmark
-    public BigDecimal objectPerformance()
-    {
+    public BigDecimal objectPerformance() {
         ThreadLocalRandom current = ThreadLocalRandom.current();
         Collection<Long> longs = new ArrayList<>(TEST_SIZE);
-        for (int i = 0; i < TEST_SIZE; i++)
-        {
+        for (int i = 0; i < TEST_SIZE; i++) {
             longs.add(current.nextLong());
         }
         BigDecimal sum = new BigDecimal(0);
-        for (Long aLong : longs)
-        {
-            sum.add(new BigDecimal(aLong));
+        for (Long aLong : longs) {
+            sum = sum.add(new BigDecimal(aLong));
         }
         return sum;
     }
 
     @Benchmark
-    public BigDecimal primitivesPerformance()
-    {
+    public BigDecimal primitivesPerformance() {
         ThreadLocalRandom current = ThreadLocalRandom.current();
         long[] longs = new long[TEST_SIZE];
-        for (int i = 0; i < TEST_SIZE; i++)
-        {
+        for (int i = 0; i < TEST_SIZE; i++) {
             longs[i] = current.nextInt();
         }
         BigDecimal sum = new BigDecimal(0);
-        for (long aLong : longs)
-        {
-            sum.add(new BigDecimal(aLong));
+        for (long aLong : longs) {
+            sum = sum.add(new BigDecimal(aLong));
         }
         return sum;
     }
 
     @Benchmark
-    public long objectPerformanceLong()
-    {
+    public long objectPerformanceLong() {
         ThreadLocalRandom current = ThreadLocalRandom.current();
         Collection<Long> longs = new ArrayList<>(TEST_SIZE);
-        for (int i = 0; i < TEST_SIZE; i++)
-        {
+        for (int i = 0; i < TEST_SIZE; i++) {
             longs.add(current.nextLong());
         }
         long sum = 0;
-        for (long aLong : longs)
-        {
+        for (long aLong : longs) {
             sum += aLong;
         }
         return sum;
     }
 
     @Benchmark
-    public long primitivesPerformanceLong()
-    {
+    public long primitivesPerformanceLong() {
         ThreadLocalRandom current = ThreadLocalRandom.current();
         long[] longs = new long[TEST_SIZE];
-        for (int i = 0; i < TEST_SIZE; i++)
-        {
+        for (int i = 0; i < TEST_SIZE; i++) {
             longs[i] = current.nextInt();
         }
         long sum = 0;
-        for (long aLong : longs)
-        {
+        for (long aLong : longs) {
             sum += aLong;
         }
         return sum;
     }
 
-    public static void main(String[] args) throws RunnerException
-    {
+    public static void main(String[] args) throws RunnerException {
         Options opt = new OptionsBuilder().forks(1)
-                              .include(PrimitiveVsObjects.class.getName())
-                              .build();
+                .include(PrimitiveVsObjects.class.getName())
+                .build();
 
         new Runner(opt).run();
     }
